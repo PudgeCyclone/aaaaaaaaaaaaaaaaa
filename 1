@@ -1,228 +1,205 @@
-#include <iostream> #include <string> #include <fstream> #include "MyQuantity.h"
+#include <iostream> 
+#include <string> 
+#include <fstream> 
+#include "MyQuantity.h"
 
 using namespace std;
 
-template<typename T> class Operations { public:
-MySet<T> set1; MySet<T> set2;
+template<typename T> class Operations { 
+public:
+  MySet<T> set1;
+  MySet<T> set2;
 
-Operations()
-{
-
-
-
-
-
+  Operations()
+  {
+    int size1, size2;
+    cout << "Введите размер 1-го множества:\n"; cin >> size1; cout << "Введите размер 2-го множества:\n"; cin >> size2;
+    cout << "Введите элементы 1-го множества:\n"; for (int i = 0; i < size1;
 i++)
+    {
+      T a;
+      cin >> a; set1.insert(a);
+    }
+    cout << "Введите элементы 2-го множества:\n"; for (int i = 0; i < size2;
+    {
+      T a;
+      cin >> a; set1.insert(a);
+    }
+  }
+  Operations(string& fileName1, string& fileName2)
+  {
+    T value;
+    ifstream in1(fileName1); if (in1.is_open())
+    {
+      while (!in1.eof())
 
-int size1, size2;
-cout << "Введите размер 1-го множества:\n"; cin >> size1; cout << "Введите размер 2-го множества:\n"; cin >> size2;
-cout << "Введите элементы 1-го множества:\n"; for (int i = 0; i < size1;
-
-{
-T a;
-cin >> a; set1.insert(a);
-
-
-
-i++)
-
-}
-cout << "Введите элементы 2-го множества:\n"; for (int i = 0; i < size2;
-
-{
-T a;
-cin >> a; set2.insert(a);
-
-}
-}
-
-Operations(string& fileName1, string& fileName2)
-{
-T value;
-ifstream in1(fileName1); if (in1.is_open())
-{
-while (!in1.eof())
-
-{
-in1 >> value; set1.insert(value);
-}
-}
-in1.close();
-ifstream in2(fileName2); if (in2.is_open())
-{
-while (!in2.eof())
-{
-in2 >> value; set2.insert(value);
-}
-}
-in2.close();
-}
-
+    {
+      in1 >> value; set1.insert(value);
+    }
+  }
+    in1.close();
+    ifstream in2(fileName2); if (in2.is_open())
+    {
+      while (!in2.eof())
+      {
+        in2 >> value; set2.insert(value);
+      }
+    }
+    in2.close();
+  }
 ~Operations()
-{
-ofstream out; out.open("output.txt"); if (out.is_open())
-{
-for (int i = 0; i < set1.get_size(); i++)
-{
-out << set1[i] << " ";
-}
-out << '\n';
-for (int i = 0; i < set2.get_size(); i++)
-{
-out << set2[i] << " ";
-}
-}
-}
+  {
+    ofstream out; out.open("output.txt"); if (out.is_open())
+    {
+      for (int i = 0; i < set1.get_size(); i++)
+      {
+        out << set1[i] << " ";
+      }
+      out << '\n';
+      for (int i = 0; i < set2.get_size(); i++)
+      {
+        out << set2[i] << " ";
+      }
+    }
+  }
 
-MySet<T> merger()
-{
-MySet<T> merg;
-for (int i = 0; i < set1.get_size(); i++)
-{
-merg.insert(set1[i]);
-}
-for (int i = 0; i < set2.get_size(); i++)
-{
-if (!merg.find(set2[i])) merg.insert(set2[i]);
-} merg.print(); return merg;
-}
+  MySet<T> merger()
+  {
+    MySet<T> merg;
+    for (int i = 0; i < set1.get_size(); i++)
+    {
+      merg.insert(set1[i]);
+    }
+    for (int i = 0; i < set2.get_size(); i++)
+    {
+      if (!merg.find(set2[i])) merg.insert(set2[i]);
+    } merg.print(); 
+    return merg;
+  }
 
-MySet<T> intersection()
-{
-MySet<T> intersect;
-for (int i = 0; i < set2.get_size(); i++)
-{
-if (set1.find(set2[i])) intersect.insert(set2[i]);
-}
-intersect.print(); return intersect;
-}
+  MySet<T> intersection()
+  {
+    MySet<T> intersect;
+    for (int i = 0; i < set2.get_size(); i++)
+    {
+      if (set1.find(set2[i])) intersect.insert(set2[i]);
+    }
+    intersect.print(); return intersect;
+  }
 
-MySet<T> difference()
-{
-MySet<T> dif;
-for (int i = 0; i < set1.get_size(); i++)
-{
-if (!set2.find(set1[i])) dif.insert(set1[i]);
-}
-dif.print(); return dif;
-}
-bool equal()
-{
-if (set1.get_size() == set2.get_size()) {
-for (int i = 0; i < set2.get_size(); i++)
-{
-if (!set1.find(set2[i])) return false;
-}
-}
-else
-return true;
+  MySet<T> difference()
+  {
+    MySet<T> dif;
+    for (int i = 0; i < set1.get_size(); i++)
+    {
+      if (!set2.find(set1[i])) dif.insert(set1[i]);
+    }
+    dif.print(); return dif;
+  }
+  bool equal()
+  {
+    if (set1.get_size() == set2.get_size()) {
+      for (int i = 0; i < set2.get_size(); i++)
+      {
+        if (!set1.find(set2[i])) return false;
+      }
+  }
+  else
+    return true;
 }
 void print()
 {
-set1.print();
-set2.print();
+  set1.print();
+  set2.print();
 }
 };
 
 template<typename T>
 void start(string& fileName1, string& fileName2)
-{
-Operations<T>* oper = new Operations<T>(fileName1, fileName2); do
-{
-
-
-
-
-
-
-\n";
-
-
-
-
-
-
-break;
-
-
-
-
-равны\n";
-
-T value; int p, i;
-cout << "1. Объединение\n" "2. Пересечение\n" "3. Разность\n" "4. Проверка на равенство\n""5. Добавление элемента\n" "6. Удаление элемента\n" "7. Вывод элементов\n"
+  {
+    Operations<T>* oper = new Operations<T>(fileName1, fileName2); do
+    {
+      T value; int p, i;
+      cout << "1. Объединение\n" "2. Пересечение\n" "3. Разность\n" "4. Проверка на равенство\n""5. Добавление элемента\n" "6. Удаление элемента\n" "7. Вывод элементов\n"
 "8. Изменить тип данных/завершить работу\n" "Укажите пункт меню:
 
-cin >> p; switch (p)
-{
-case 1:
-cout << "***ОБЪЕДИНЕНИЕ***\n"; oper->merger(); cout << endl; break; case 2:
-cout << "***ПЕРЕСЕЧЕНИЕ***\n"; oper->intersection(); cout << endl;
+      cin >> p; switch (p)
+      {
+      case 1:
+        cout << "***ОБЪЕДИНЕНИЕ***\n"; oper->merger(); cout << endl; break;
+      case 2:
+        cout << "***ПЕРЕСЕЧЕНИЕ***\n"; oper->intersection(); cout << endl;break;
+      case 3:
+        cout << "***РАЗНОСТЬ***\n"; oper->difference(); cout << endl; break; 
+      case 4:
+        cout << "***РАВЕНСТВО***\n"; if (oper->equal()) cout << "Множества
 
-case 3:
-cout << "***РАЗНОСТЬ***\n"; oper->difference(); cout << endl; break; case 4:
-cout << "***РАВЕНСТВО***\n"; if (oper->equal()) cout << "Множества
-
-else
-cout << "Множества не равны\n"; cout << endl; break;
-case 5:
-cout << "***ДОБАВЛЕНИЕ***\n";
-cout << "Введите номер множества (1 или 2), куда хотите добавить
-
-элемент и значение\n";
-cin >> i;
-cin >> value; if (i == 1)
-oper->set1.insert(value); else if (i == 2) oper-
->set2.insert(value); cout << endl; break;
-case 6:
-cout << "***УДАЛЕНИЕ***\n";
-cout << "Введите номер множества (1 или 2), откуда хотите удалить элемент и значение\n";
-cin >> i;
-cin >> value; if (i == 1)
-oper->set1.exclude(value); else if (i == 2) oper-
->set2.exclude(value); cout << endl; break;
-case 7:
-cout << "***ВЫВОД***\n"; oper->print(); cout << endl; break; case 8:
-delete oper; return; default:
-cout << "Выбранной	команды	не	существует.	Повторите
-попытку\n";
+        else
+        cout << "Множества не равны\n"; cout << endl; break;
+      case 5:
+        cout << "***ДОБАВЛЕНИЕ***\n";
+        cout << "Введите номер множества (1 или 2), куда хотите добавитьэлемент и значение\n";
+        cin >> i;
+        cin >> value; if (i == 1)
+          oper->set1.insert(value); else if (i == 2) oper->set2.insert(value); cout << endl; break;
+      case 6:
+        cout << "***УДАЛЕНИЕ***\n";
+        cout << "Введите номер множества (1 или 2), откуда хотите удалить элемент и значение\n";
+        cin >> i;
+        cin >> value; if (i == 1)
+          oper->set1.exclude(value); else if (i == 2) oper->set2.exclude(value); cout << endl; break;
+      case 7:
+        cout << "***ВЫВОД***\n"; oper->print(); cout << endl; break;\
+      case 8:
+      delete oper; return; default:
+        cout << "Выбранной	команды	не	существует.	Повторитепопытку\n";
+      }
+    } while (true);
 }
-} while (true);
+  set_1.print();
 }
-
-set_1.print();
-}
-else if (number == 11) { set_1.read();
-cout << "множество успешно считано\n";
-}
-else if (number == 12) { set_1.write();
-cout << "множество сохранено перед завершением работы программы\n"; break;
-}
-else {
-cout << "некорректная команда. введите ее снова.\n";
-}
-}
+    else if (number == 11) 
+      { set_1.read();
+  cout << "множество успешно считано\n";
+    }
+    else if (number == 12) 
+      { set_1.write();
+      cout << "множество сохранено перед завершением работы программы\n"; 
+    break;
+    }
+    else {
+      cout << "некорректная команда. введите ее снова.\n";
+    }
+  }
 }
 
 int main()
 {
-setlocale(LC_ALL, "ru"); string names[8] = {
-"setInt1.txt", "setInt2.txt", "setDouble1.txt", "setDouble2.txt", "setChar1.txt", "setChar2.txt", "setString1.txt", "setString2.txt" };
-cout << "Выберите тип данных:\n"; cout << "1. Int\n";
-cout << "2. Float\n"; cout << "3. String\n";
+  setlocale(LC_ALL, "ru"); string names[8] = {
+  "setInt1.txt", "setInt2.txt", "setDouble1.txt", "setDouble2.txt", "setChar1.txt", "setChar2.txt", "setString1.txt", "setString2.txt" };
+  cout << "Выберите тип данных:\n"; 
+  cout << "1. Int\n";
+  cout << "2. Float\n"; 
+  cout << "3. String\n";
 
-int type = -1;
-while (type < 1 || type > 3) { cin >> type;
-}
+  int type = -1;
+  while (type < 1 || type > 3) 
+    { cin >> type;
+  }
 
-if (type == 1) {
-Set<int> set_1 = Set<int>(); Set<int> set_2 = Set<int>(); commander(set_1, set_2);
-}
-else if (type == 2) {
-Set<float> set_1 = Set<float>(); Set<float> set_2 = Set<float>(); commander(set_1, set_2);
-}
-else if (type == 3) {
-Set<string> set_1 = Set<string>(); Set<string> set_2 = Set<string>();
-commander(set_1, set_2);
-}
+  if (type == 1) {
+    Set<int> set_1 = Set<int>();
+    Set<int> set_2 = Set<int>(); 
+    commander(set_1, set_2);
+  }
+  else if (type == 2) {
+    Set<float> set_1 = Set<float>(); 
+    Set<float> set_2 = Set<float>();
+    commander(set_1, set_2);
+  }
+  else if (type == 3) {
+    Set<string> set_1 = Set<string>(); 
+    Set<string> set_2 = Set<string>();
+  commander(set_1, set_2);
+  }
 }
