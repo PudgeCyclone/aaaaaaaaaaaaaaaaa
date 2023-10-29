@@ -1,0 +1,100 @@
+#pragma once
+
+#include <algorithm> template<typename T> class MySet
+{
+public:
+MySet();
+MySet(unsigned int size); MySet(const MySet<T>& v);
+~MySet();
+
+bool insert(const T& value); bool exclude(const T& value); bool find(const T& value); void print();
+int get_size() const { return size; } T& operator[](unsigned int index); MySet<T>& operator=(const MySet<T>& v); private:
+T* arr; int size; int capacity;
+};
+
+template<typename T> inline MySet<T>::MySet()
+: arr(nullptr), size(0), capacity(0) {}
+
+template<typename T>
+inline MySet<T>::MySet(unsigned int size)
+: arr(nullptr), size(size), capacity(0) {}
+template<typename T>
+inline MySet<T>::MySet(const MySet<T>& v)
+{
+size = v.size; capacity = v.capacity; arr = new T[size];
+for (int i = 0; i < size; i++)arr[i] = v.arr[i];
+}
+
+template<typename T> inline MySet<T>::~MySet()
+{
+delete[] arr;
+}
+
+template<typename T>
+inline bool MySet<T>::insert(const T& value)
+{
+if (this->find(value))
+return false; if (size >= capacity)
+{
+if (arr == nullptr)
+{
+size = 0;
+capacity = 0;
+}
+
+
+
+arr = buf;
+}
+
+capacity += 5;
+T* buf = new T[capacity]; std::copy(arr, arr + size, buf); delete[] arr;
+
+arr[size++] = value; return true;
+}
+
+template<typename T>
+inline bool MySet<T>::exclude(const T& value)
+{
+if (!this->find(value))return false; T* buf = new T[size - 1]; int j = 0; for (int i = 0; i < size; i++)
+{
+if (arr[i] != value)
+{
+buf[j] = arr[i]; j++;
+}
+}
+delete[] arr; arr = buf;
+--size; return true;
+}
+template<typename T>
+inline bool MySet<T>::find(const T& value)
+{
+for (int i = 0; i < size; i++)
+{
+if (arr[i] == value) return true;
+}
+return false;
+}
+template<typename T>
+inline void MySet<T>::print()
+{
+std::cout << "[";
+for (int i = 0; i < size; i++)
+{
+std::cout << arr[i]; if (i != size - 1) std::cout << ", ";
+}
+std::cout << "]\n";
+}
+
+template<class T>
+T& MySet<T>::operator[](unsigned int index)
+{
+return arr[index];
+}
+
+template<typename T>
+inline MySet<T>& MySet<T>::operator=(const MySet<T>& v)
+{
+delete[] arr; size = v.size;
+capacity = v.capacity; arr = new T[size]; for (int i = 0; i < size; i++)arr[i] = v.arr[i]; return *this;
+}
